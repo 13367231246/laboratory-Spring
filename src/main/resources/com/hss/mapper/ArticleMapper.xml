@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hss.mapper.ArticleMapper">
+    <!-- 动态SQL id是方法的名字 resultType返回类型是实体类型-->
+    <select id="detail" resultType="com.hss.pojo.Article">
+        select * from article
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+        </where>
+    </select>
+</mapper>

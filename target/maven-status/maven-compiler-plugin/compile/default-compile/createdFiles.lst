@@ -1,0 +1,6 @@
+com\hss\controller\UserBodyInfoController.class
+com\hss\config\CorsConfig.class
+com\hss\utils\Md5Util.class
+com\hss\pojo\UserBodyInfo.class
+com\hss\pojo\Result.class
+com\hss\service\UserBodyInfoService.class

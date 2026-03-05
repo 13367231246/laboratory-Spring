@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url:  jdbc:mysql://218.16.182.38:3306/health_system?useSSL=false&serverTimezone=UTC&characterEncoding=utf8
+    username: root
+    password: 203719@Hss
+  data:
+    redis:
+      host: 218.16.182.38
+      port: 6379
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+#  驼峰和下划线命名规则自动映射
+Mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
