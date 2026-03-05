@@ -13,11 +13,10 @@ public class LoginRequest {
     @NotBlank(message = "学工号不能为空")
     private String studentId;
 
-    @NotBlank(message = "角色不能为空")
-    @Pattern(regexp = "^(student|teacher)$", message = "角色只能是student或teacher")
-    private String role;
-
     @NotBlank(message = "密码不能为空")
     @Pattern(regexp = "^\\S{5,16}$", message = "密码长度需在5到16个字符之间")
     private String password;
+
+    @NotBlank(message = "角色不能为空")
+    private String role;
 }

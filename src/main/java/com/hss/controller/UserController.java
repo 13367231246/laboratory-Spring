@@ -1,5 +1,6 @@
 package com.hss.controller;
 
+
 import com.hss.pojo.LoginRequest;
 import com.hss.pojo.RegisterRequest;
 import com.hss.pojo.Result;
@@ -43,7 +44,7 @@ public class UserController {
         String role = request.getRole();
         String password = request.getPassword();
         String studentId = request.getStudentId();
-        
+        String realName = request.getRealName();
         //查询用户名是否占用
         User u = userService.findUserName(username);
         if(u != null){
@@ -71,7 +72,7 @@ public class UserController {
         user.setPassword(password);
         user.setStudentId(studentId);
         // 默认真实姓名先用用户名，占位，后续由用户完善
-        user.setRealName(username);
+        user.setRealName(realName);
         
         // 完成注册操作
         userService.register(user);
@@ -95,7 +96,7 @@ public class UserController {
 
         // 校验角色是否匹配
         if (loginUser.getRole() == null || !loginUser.getRole().equals(role)) {
-            return Result.error("角色不匹配");
+            return Result.error("未找到对应角色");
         }
         
         //判断密码是否正确 密码是MD5加密的
@@ -130,11 +131,11 @@ public class UserController {
         return Result.success(user);
     }
 
-    //更新用户信息
+    // 更新用户信息（基础资料）
     @PutMapping("/updateInfo")
     public Result updateInfo(@Validated @RequestBody User user) {
         userService.updateInfo(user);
-        return Result.success();
+        return Result.success(1);
     }
 
     //更新用户头像

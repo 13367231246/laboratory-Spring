@@ -49,16 +49,6 @@ public class User {
     private String studentId;
 
     /**
-     * 昵称
-     */
-    private String nickname;
-
-    /**
-     * 头像 URL
-     */
-    private String avatar;
-
-    /**
      * 手机号
      */
     @Pattern(regexp = "^1[3-9]\\d{9}$", message = "手机号码格式不正确")

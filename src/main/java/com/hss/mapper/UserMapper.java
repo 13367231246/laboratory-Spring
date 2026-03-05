@@ -31,8 +31,8 @@ public interface UserMapper {
     void add(User user);
 
     // 更新用户基础信息（不包含密码）
-    @Update("update user set real_name=#{realName},student_id=#{studentId},nickname=#{nickname}," +
-            "avatar=#{avatar},phone=#{phone},email=#{email},college=#{college},major=#{major}," +
+    @Update("update user set real_name=#{realName},student_id=#{studentId}," +
+            "phone=#{phone},email=#{email},college=#{college},major=#{major}," +
             "class_name=#{className},status=#{status},update_time=now() where id=#{id}")
     void updateInfo(User user);
 
