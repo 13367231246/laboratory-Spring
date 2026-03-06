@@ -98,6 +98,11 @@ public class UserController {
         if (loginUser.getRole() == null || !loginUser.getRole().equals(role)) {
             return Result.error("未找到对应角色");
         }
+
+        // 检查用户状态，如果被禁用（status=0）则不允许登录
+        if (loginUser.getStatus() != null && loginUser.getStatus() == 0) {
+            return Result.error("账号已被禁用，请联系管理员");
+        }
         
         //判断密码是否正确 密码是MD5加密的
         //可以对传进来的密码进行MD5加密再与数据库中的密码进行比对，成功返回用户token

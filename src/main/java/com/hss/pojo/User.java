@@ -81,6 +81,16 @@ public class User {
     private String className;
 
     /**
+     * 职称（教师专用）：教授/副教授/讲师/助教等
+     */
+    private String title;
+
+    /**
+     * 所属系/部门（教师专用）
+     */
+    private String department;
+
+    /**
      * 状态：0-禁用，1-正常
      */
     private Integer status;
