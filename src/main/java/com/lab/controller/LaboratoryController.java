@@ -3,6 +3,7 @@ package com.lab.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lab.pojo.LabEquipmentItem;
 import com.lab.pojo.Laboratory;
+import com.lab.pojo.LaboratorySummary;
 import com.lab.pojo.PageBean;
 import com.lab.pojo.Result;
 import com.lab.service.LaboratoryService;
@@ -95,6 +96,15 @@ public class LaboratoryController {
         Integer quantity = params.get("quantity") != null ? (Integer) params.get("quantity") : 1;
         laboratoryService.addEquipment(laboratoryId, equipmentId, quantity);
         return Result.success();
+    }
+    
+    /**
+     * 获取实验室汇总统计
+     */
+    @GetMapping("/summary")
+    public Result<LaboratorySummary> getSummary() {
+        LaboratorySummary summary = laboratoryService.getSummary();
+        return Result.success(summary);
     }
 }
 

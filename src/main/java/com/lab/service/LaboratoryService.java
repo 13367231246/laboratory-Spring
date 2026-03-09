@@ -3,6 +3,7 @@ package com.lab.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lab.pojo.LabEquipmentItem;
 import com.lab.pojo.Laboratory;
+import com.lab.pojo.LaboratorySummary;
 import com.lab.pojo.PageBean;
 
 import java.util.List;
@@ -48,5 +49,10 @@ public interface LaboratoryService {
      * 添加设备到实验室
      */
     void addEquipment(Integer laboratoryId, Integer equipmentId, Integer quantity);
+    
+    /**
+     * 获取实验室汇总统计
+     */
+    LaboratorySummary getSummary();
 }
 

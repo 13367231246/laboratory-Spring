@@ -2,9 +2,11 @@ package com.lab.service.impl;
 
 import com.lab.mapper.EquipmentMapper;
 import com.lab.mapper.LaboratoryMapper;
+import com.lab.mapper.MaintenanceRecordMapper;
 import com.lab.pojo.Equipment;
 import com.lab.pojo.LabEquipmentItem;
 import com.lab.pojo.Laboratory;
+import com.lab.pojo.LaboratorySummary;
 import com.lab.pojo.PageBean;
 import com.lab.service.LaboratoryService;
 import com.lab.utils.ThreadLocalUtil;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDate;
 
 @Service
 public class LaboratoryServiceImpl implements LaboratoryService {
@@ -29,6 +32,9 @@ public class LaboratoryServiceImpl implements LaboratoryService {
 
     @Autowired
     private EquipmentMapper equipmentMapper;
+    
+    @Autowired
+    private MaintenanceRecordMapper maintenanceRecordMapper;
 
     @Override
     public PageBean<Laboratory> list(Integer pageNo, Integer pageSize) {
@@ -463,6 +469,30 @@ public class LaboratoryServiceImpl implements LaboratoryService {
             return true;
         }
         return false;
+    }
+    
+    @Override
+    public LaboratorySummary getSummary() {
+        LaboratorySummary summary = new LaboratorySummary();
+        
+        // 可用实验室数量（status=1）
+        Integer availableLabs = laboratoryMapper.countByStatus(1);
+        summary.setAvailableLabs(availableLabs != null ? availableLabs : 0);
+        
+        // 使用中实验室数量（status=2）
+        Integer inUseLabs = laboratoryMapper.countByStatus(2);
+        summary.setInUseLabs(inUseLabs != null ? inUseLabs : 0);
+        
+        // 待维修设备数量（status=0 或 1 的维修记录）
+        Integer pendingMaintenanceEquipment = maintenanceRecordMapper.countByStatusIn(0, 1);
+        summary.setPendingMaintenanceEquipment(pendingMaintenanceEquipment != null ? pendingMaintenanceEquipment : 0);
+        
+        // 今日申请数量（今日提交的维修申请）
+        LocalDate today = LocalDate.now();
+        Integer todayApplications = maintenanceRecordMapper.countByDate(today);
+        summary.setTodayApplications(todayApplications != null ? todayApplications : 0);
+        
+        return summary;
     }
 }
 

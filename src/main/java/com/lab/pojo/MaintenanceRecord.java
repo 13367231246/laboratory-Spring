@@ -30,16 +30,32 @@ public class MaintenanceRecord {
      * 实验室ID
      */
     private Integer laboratoryId;
+
+    private String labNumber;
+
+    private String labName;
+
+    private String location;
     
     /**
      * 设备ID
      */
     private Integer equipmentId;
+
+    private String equipmentName;
+
+    private String equipmentType;
+
+    private String equipmentModel;
+
+    private String assetNumber;
     
     /**
      * 报修人ID
      */
     private Integer reporterId;
+
+    private String reporterName;
     
     /**
      * 报修人角色：student-学生，teacher-教师，admin-管理员
@@ -70,6 +86,8 @@ public class MaintenanceRecord {
      * 指派的教师ID
      */
     private Integer assignedTeacherId;
+
+    private String assignedTeacherName;
     
     /**
      * 维修开始时间

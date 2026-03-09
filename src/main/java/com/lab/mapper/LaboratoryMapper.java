@@ -49,5 +49,9 @@ public interface LaboratoryMapper {
     // 删除实验室
     @Delete("delete from laboratory where id = #{id}")
     void delete(Integer id);
+    
+    // 根据状态统计实验室数量
+    @Select("select count(*) from laboratory where status = #{status}")
+    Integer countByStatus(Integer status);
 }
 
