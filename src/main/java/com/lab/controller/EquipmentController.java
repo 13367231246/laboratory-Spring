@@ -36,6 +36,15 @@ public class EquipmentController {
     }
 
     /**
+     * 普通用户：获取可使用设备（available_quantity > 0 且 status = 1），可按设备名模糊搜索
+     */
+    @GetMapping("/user/available")
+    public Result<java.util.List<Equipment>> listAvailable(@RequestParam(required = false) String equipmentName) {
+        java.util.List<Equipment> list = equipmentService.listAll(equipmentName);
+        return Result.success(list);
+    }
+
+    /**
      * 根据ID获取设备详情
      */
     @GetMapping("/{id}")

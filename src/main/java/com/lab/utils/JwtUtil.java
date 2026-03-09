@@ -14,7 +14,7 @@ public class JwtUtil {
     public static String genToken(Map<String, Object> claims) {
         return JWT.create()
                 .withClaim("claims", claims)
-                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 1)) // 1小时有效期
+                .withExpiresAt(new Date(System.currentTimeMillis() + 3000 * 60 * 60 * 1)) // 3小时有效期
                 .sign(Algorithm.HMAC256(KEY));
     }
 
