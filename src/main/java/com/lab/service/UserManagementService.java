@@ -54,5 +54,10 @@ public interface UserManagementService {
      * 删除用户
      */
     void delete(Integer id);
+    
+    /**
+     * 统计用户总数
+     */
+    Long countAll();
 }
 

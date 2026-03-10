@@ -47,6 +47,33 @@ public class MaintenanceRecordController {
         PageBean<MaintenanceRecord> pageBean = maintenanceRecordService.listMy(pageNo, pageSize);
         return Result.success(pageBean);
     }
+    
+    /**
+     * 用户：获取我的报修任务详情
+     */
+    @GetMapping("/my/{id}")
+    public Result<MaintenanceRecord> getMyMaintenanceDetail(@PathVariable Integer id) {
+        MaintenanceRecord record = maintenanceRecordService.getMyMaintenanceDetail(id);
+        return Result.success(record);
+    }
+    
+    /**
+     * 用户：删除我的报修任务（仅待审核状态可删除）
+     */
+    @DeleteMapping("/my/{id}")
+    public Result deleteMyMaintenance(@PathVariable Integer id) {
+        maintenanceRecordService.deleteMyMaintenance(id);
+        return Result.success();
+    }
+    
+    /**
+     * 用户：获取我的报修进度统计
+     */
+    @GetMapping("/my/progress")
+    public Result<Map<String, Integer>> getMyMaintenanceProgress() {
+        Map<String, Integer> progress = maintenanceRecordService.getMyMaintenanceProgress();
+        return Result.success(progress);
+    }
 
     /**
      * 老师：分页查询待处理（指派给我，状态0/1）的维修记录
@@ -74,6 +101,15 @@ public class MaintenanceRecordController {
     @PatchMapping("/admin/{id}/assign")
     public Result assignTeacher(@PathVariable Integer id, @RequestBody MaintenanceAssignRequest request) {
         maintenanceRecordService.assignTeacher(id, request.getTeacherId());
+        return Result.success();
+    }
+    
+    /**
+     * 管理员：删除维修任务
+     */
+    @DeleteMapping("/admin/{id}")
+    public Result deleteMaintenanceRecord(@PathVariable Integer id) {
+        maintenanceRecordService.deleteMaintenanceRecord(id);
         return Result.success();
     }
 

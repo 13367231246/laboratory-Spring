@@ -53,5 +53,9 @@ public interface LaboratoryMapper {
     // 根据状态统计实验室数量
     @Select("select count(*) from laboratory where status = #{status}")
     Integer countByStatus(Integer status);
+    
+    // 获取最近创建的实验室
+    @Select("select * from laboratory order by create_time desc limit #{limit}")
+    List<Laboratory> findRecent(@Param("limit") Integer limit);
 }
 

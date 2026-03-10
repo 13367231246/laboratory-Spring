@@ -2,6 +2,9 @@ package com.lab.service;
 
 import com.lab.pojo.LabApplication;
 import com.lab.pojo.PageBean;
+import com.lab.pojo.UserStatistics;
+
+import java.util.List;
 
 public interface LabApplicationService {
 
@@ -59,4 +62,19 @@ public interface LabApplicationService {
      * 定时任务：将“使用中”且超过结束时间+3小时的申请自动置为“已完成”
      */
     void autoCompleteOverdue();
+    
+    /**
+     * 获取我的统计信息（申请次数、报修次数、维修数、使用实验室数）
+     */
+    UserStatistics getMyStatistics();
+    
+    /**
+     * 统计今日申请数量
+     */
+    Integer countTodayApplications();
+    
+    /**
+     * 获取今日申请（限制条数）
+     */
+    List<LabApplication> getTodayApplications(Integer limit);
 }

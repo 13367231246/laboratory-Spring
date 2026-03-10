@@ -64,4 +64,17 @@ public interface LabApplicationMapper {
 
     @Delete("delete from lab_application where id = #{id}")
     void delete(Integer id);
+    
+    @Select("select count(distinct laboratory_id) from lab_application where applicant_id = #{applicantId} and status in (#{status1}, #{status2})")
+    Integer countDistinctLaboratoryByApplicantIdAndStatus(@Param("applicantId") Integer applicantId, 
+                                                         @Param("status1") Integer status1, 
+                                                         @Param("status2") Integer status2);
+    
+    // 统计今日申请数量
+    @Select("select count(*) from lab_application where date(create_time) = curdate()")
+    Integer countTodayApplications();
+    
+    // 获取今日申请（限制条数）
+    @Select("select * from lab_application where date(create_time) = curdate() order by create_time desc limit #{limit}")
+    List<LabApplication> findTodayApplications(@Param("limit") Integer limit);
 }

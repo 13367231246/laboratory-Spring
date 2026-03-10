@@ -81,4 +81,11 @@ public interface MaintenanceRecordMapper {
     
     @Select("select * from maintenance_record where date(create_time) = #{date} order by create_time desc limit #{limit}")
     List<MaintenanceRecord> findByDate(@Param("date") java.time.LocalDate date, @Param("limit") Integer limit);
+    
+    @Select("select count(*) from maintenance_record where reporter_id = #{reporterId} and status = #{status}")
+    Long countByReporterIdAndStatus(@Param("reporterId") Integer reporterId, @Param("status") Integer status);
+    
+    // 删除维修记录
+    @Delete("delete from maintenance_record where id = #{id}")
+    void delete(@Param("id") Integer id);
 }

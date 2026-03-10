@@ -4,6 +4,7 @@ import com.lab.pojo.LabApplication;
 import com.lab.pojo.LabApplicationRequest;
 import com.lab.pojo.PageBean;
 import com.lab.pojo.Result;
+import com.lab.pojo.UserStatistics;
 import com.lab.service.LabApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -127,5 +128,14 @@ public class LabApplicationController {
     public Result<LabApplication> getDetail(@PathVariable Integer id) {
         LabApplication application = labApplicationService.getDetail(id);
         return Result.success(application);
+    }
+    
+    /**
+     * 普通用户：获取我的统计信息（申请次数、报修次数、维修数、使用实验室数）
+     */
+    @GetMapping("/my/statistics")
+    public Result<UserStatistics> getMyStatistics() {
+        UserStatistics statistics = labApplicationService.getMyStatistics();
+        return Result.success(statistics);
     }
 }

@@ -6,6 +6,7 @@ import com.lab.pojo.PageBean;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 public interface MaintenanceRecordService {
 
@@ -16,6 +17,15 @@ public interface MaintenanceRecordService {
 
     /** 用户：分页查询我的维修记录 */
     PageBean<MaintenanceRecord> listMy(Integer pageNo, Integer pageSize);
+    
+    /** 用户：获取我的报修任务详情 */
+    MaintenanceRecord getMyMaintenanceDetail(Integer recordId);
+    
+    /** 用户：删除我的报修任务（仅待审核状态可删除） */
+    void deleteMyMaintenance(Integer recordId);
+    
+    /** 用户：获取我的报修进度统计 */
+    Map<String, Integer> getMyMaintenanceProgress();
 
     /** 老师：分页查询待处理维修记录（已指派给我，状态0/1） */
     PageBean<MaintenanceRecord> listTodoAsTeacher(Integer pageNo, Integer pageSize);
@@ -25,6 +35,9 @@ public interface MaintenanceRecordService {
 
     /** 管理员：指派维修教师 */
     void assignTeacher(Integer recordId, Integer teacherId);
+    
+    /** 管理员：删除维修任务 */
+    void deleteMaintenanceRecord(Integer recordId);
 
     /** 教师：开始维修（状态置为1，记录开始时间） */
     void startRepair(Integer recordId);

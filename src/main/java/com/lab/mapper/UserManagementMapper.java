@@ -64,5 +64,9 @@ public interface UserManagementMapper {
     // 删除用户
     @Delete("delete from user where id = #{id}")
     void delete(Integer id);
+    
+    // 统计用户总数
+    @Select("select count(*) from user")
+    Long countAll();
 }
 

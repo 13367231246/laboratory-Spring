@@ -494,5 +494,20 @@ public class LaboratoryServiceImpl implements LaboratoryService {
         
         return summary;
     }
+    
+    @Override
+    public Long countAll() {
+        return laboratoryMapper.countAll();
+    }
+    
+    @Override
+    public Long countAllEquipment() {
+        return equipmentMapper.countAll();
+    }
+    
+    @Override
+    public List<Laboratory> getRecentLaboratories(Integer limit) {
+        return laboratoryMapper.findRecent(limit);
+    }
 }
 

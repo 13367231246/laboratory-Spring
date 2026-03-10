@@ -2,11 +2,13 @@ package com.lab.service.impl;
 
 import com.lab.mapper.LabApplicationMapper;
 import com.lab.mapper.LaboratoryMapper;
+import com.lab.mapper.MaintenanceRecordMapper;
 import com.lab.mapper.UserManagementMapper;
 import com.lab.pojo.LabApplication;
 import com.lab.pojo.Laboratory;
 import com.lab.pojo.PageBean;
 import com.lab.pojo.User;
+import com.lab.pojo.UserStatistics;
 import com.lab.service.LabApplicationService;
 import com.lab.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class LabApplicationServiceImpl implements LabApplicationService {
 
     @Autowired
     private UserManagementMapper userManagementMapper;
+    
+    @Autowired
+    private MaintenanceRecordMapper maintenanceRecordMapper;
 
     @Override
     public LabApplication apply(LabApplication application) {
@@ -242,5 +247,39 @@ public class LabApplicationServiceImpl implements LabApplicationService {
             throw new RuntimeException("无权限操作，仅管理员可执行该操作");
         }
         return id;
+    }
+    
+    @Override
+    public UserStatistics getMyStatistics() {
+        Integer userId = getCurrentUserId();
+        UserStatistics statistics = new UserStatistics();
+        
+        // 实验室申请次数
+        Long labApplicationCountLong = labApplicationMapper.countByApplicantId(userId);
+        statistics.setLabApplicationCount(labApplicationCountLong != null ? labApplicationCountLong.intValue() : 0);
+        
+        // 报修次数（维修申请次数）
+        Long maintenanceApplicationCountLong = maintenanceRecordMapper.countByReporterId(userId);
+        statistics.setMaintenanceApplicationCount(maintenanceApplicationCountLong != null ? maintenanceApplicationCountLong.intValue() : 0);
+        
+        // 维修数量（已完成的维修数量）
+        Long maintenanceCompletedCountLong = maintenanceRecordMapper.countByReporterIdAndStatus(userId, 2); // status=2 已完成
+        statistics.setMaintenanceCompletedCount(maintenanceCompletedCountLong != null ? maintenanceCompletedCountLong.intValue() : 0);
+        
+        // 使用的实验室数量（已批准或使用中的实验室申请涉及的实验室数量）
+        Integer usedLaboratoryCount = labApplicationMapper.countDistinctLaboratoryByApplicantIdAndStatus(userId, 1, 3); // status=1已批准, 3使用中
+        statistics.setUsedLaboratoryCount(usedLaboratoryCount != null ? usedLaboratoryCount : 0);
+        
+        return statistics;
+    }
+    
+    @Override
+    public Integer countTodayApplications() {
+        return labApplicationMapper.countTodayApplications();
+    }
+    
+    @Override
+    public List<LabApplication> getTodayApplications(Integer limit) {
+        return labApplicationMapper.findTodayApplications(limit);
     }
 }

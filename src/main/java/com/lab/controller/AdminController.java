@@ -2,8 +2,14 @@ package com.lab.controller;
 
 import com.lab.pojo.Admin;
 import com.lab.pojo.AdminLoginRequest;
+import com.lab.pojo.AdminSummary;
+import com.lab.pojo.LabApplication;
+import com.lab.pojo.Laboratory;
 import com.lab.pojo.Result;
 import com.lab.service.AdminService;
+import com.lab.service.LabApplicationService;
+import com.lab.service.LaboratoryService;
+import com.lab.service.UserManagementService;
 import com.lab.utils.JwtUtil;
 import com.lab.utils.Md5Util;
 import com.lab.utils.ThreadLocalUtil;
@@ -17,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +34,15 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private LaboratoryService laboratoryService;
+    
+    @Autowired
+    private UserManagementService userManagementService;
+    
+    @Autowired
+    private LabApplicationService labApplicationService;
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
@@ -117,4 +133,48 @@ public Result adminUpdatePassword(@RequestBody Map<String, String> params,
         Admin admin = adminService.findByUsername(username);
         return Result.success(admin);
 }
+    
+    /**
+     * 管理员：获取全局汇总统计
+     */
+    @GetMapping("/summary")
+    public Result<AdminSummary> getAdminSummary() {
+        AdminSummary summary = new AdminSummary();
+        
+        // 实验室总数
+        Long totalLabsLong = laboratoryService.countAll();
+        summary.setTotalLaboratories(totalLabsLong != null ? totalLabsLong.intValue() : 0);
+        
+        // 用户总数
+        Long totalUsersLong = userManagementService.countAll();
+        summary.setTotalUsers(totalUsersLong != null ? totalUsersLong.intValue() : 0);
+        
+        // 设备总数
+        Long totalEquipmentLong = laboratoryService.countAllEquipment();
+        summary.setTotalEquipment(totalEquipmentLong != null ? totalEquipmentLong.intValue() : 0);
+        
+        // 今日预约数
+        Integer todayApplications = labApplicationService.countTodayApplications();
+        summary.setTodayApplications(todayApplications != null ? todayApplications : 0);
+        
+        return Result.success(summary);
+    }
+    
+    /**
+     * 管理员：获取今日申请（最近5条）
+     */
+    @GetMapping("/today-applications")
+    public Result<List<LabApplication>> getTodayApplications() {
+        List<LabApplication> applications = labApplicationService.getTodayApplications(5);
+        return Result.success(applications);
+    }
+    
+    /**
+     * 管理员：获取最近5个实验室
+     */
+    @GetMapping("/recent-laboratories")
+    public Result<List<Laboratory>> getRecentLaboratories() {
+        List<Laboratory> laboratories = laboratoryService.getRecentLaboratories(5);
+        return Result.success(laboratories);
+    }
 }

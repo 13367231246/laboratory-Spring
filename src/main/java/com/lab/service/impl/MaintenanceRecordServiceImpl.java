@@ -135,6 +135,59 @@ public class MaintenanceRecordServiceImpl implements MaintenanceRecordService {
         Long total = maintenanceRecordMapper.countByReporterId(userId);
         return new PageBean<>(total, rows);
     }
+    
+    @Override
+    public MaintenanceRecord getMyMaintenanceDetail(Integer recordId) {
+        Integer userId = getCurrentUserId();
+        MaintenanceRecord record = maintenanceRecordMapper.findById(recordId);
+        if (record == null) {
+            throw new RuntimeException("维修记录不存在");
+        }
+        if (!record.getReporterId().equals(userId)) {
+            throw new RuntimeException("无权限查看该维修记录");
+        }
+        return record;
+    }
+    
+    @Override
+    public void deleteMyMaintenance(Integer recordId) {
+        Integer userId = getCurrentUserId();
+        MaintenanceRecord record = maintenanceRecordMapper.findById(recordId);
+        if (record == null) {
+            throw new RuntimeException("维修记录不存在");
+        }
+        if (!record.getReporterId().equals(userId)) {
+            throw new RuntimeException("无权限删除该维修记录");
+        }
+        if (record.getStatus() != null && record.getStatus() != STATUS_WAITING) {
+            throw new RuntimeException("仅待审核状态的维修记录可删除");
+        }
+        maintenanceRecordMapper.delete(recordId);
+    }
+    
+    @Override
+    public Map<String, Integer> getMyMaintenanceProgress() {
+        Integer userId = getCurrentUserId();
+        Map<String, Integer> progress = new HashMap<>();
+        
+        // 待维护数量
+        Long waitingLong = maintenanceRecordMapper.countByReporterIdAndStatus(userId, STATUS_WAITING);
+        progress.put("waiting", waitingLong != null ? waitingLong.intValue() : 0);
+        
+        // 维修中数量
+        Long repairingLong = maintenanceRecordMapper.countByReporterIdAndStatus(userId, STATUS_REPAIRING);
+        progress.put("repairing", repairingLong != null ? repairingLong.intValue() : 0);
+        
+        // 已完成数量
+        Long completedLong = maintenanceRecordMapper.countByReporterIdAndStatus(userId, STATUS_COMPLETED);
+        progress.put("completed", completedLong != null ? completedLong.intValue() : 0);
+        
+        // 不需要维护数量
+        Long noNeedLong = maintenanceRecordMapper.countByReporterIdAndStatus(userId, STATUS_NO_NEED);
+        progress.put("noNeed", noNeedLong != null ? noNeedLong.intValue() : 0);
+        
+        return progress;
+    }
 
     @Override
     public PageBean<MaintenanceRecord> listTodoAsTeacher(Integer pageNo, Integer pageSize) {
@@ -173,6 +226,16 @@ public class MaintenanceRecordServiceImpl implements MaintenanceRecordService {
         }
         String teacherName = teacher.getRealName();
         maintenanceRecordMapper.assignTeacher(recordId, teacherId, teacherName);
+    }
+    
+    @Override
+    public void deleteMaintenanceRecord(Integer recordId) {
+        getCurrentAdminId();
+        MaintenanceRecord record = maintenanceRecordMapper.findById(recordId);
+        if (record == null) {
+            throw new RuntimeException("维修记录不存在");
+        }
+        maintenanceRecordMapper.delete(recordId);
     }
 
     @Override

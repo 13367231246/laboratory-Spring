@@ -208,5 +208,10 @@ public class UserManagementServiceImpl implements UserManagementService {
         }
         return adminId;
     }
+    
+    @Override
+    public Long countAll() {
+        return userManagementMapper.countAll();
+    }
 }
 

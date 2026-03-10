@@ -54,5 +54,20 @@ public interface LaboratoryService {
      * 获取实验室汇总统计
      */
     LaboratorySummary getSummary();
+    
+    /**
+     * 统计实验室总数
+     */
+    Long countAll();
+    
+    /**
+     * 统计设备总数
+     */
+    Long countAllEquipment();
+    
+    /**
+     * 获取最近创建的实验室
+     */
+    List<Laboratory> getRecentLaboratories(Integer limit);
 }
 
