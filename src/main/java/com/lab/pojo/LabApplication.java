@@ -30,6 +30,12 @@ public class LabApplication {
     private Integer applicantId;
     /** 申请人角色：student / teacher */
     private String applicantRole;
+    /** 申请人真实姓名（冗余字段） */
+    private String applicantRealName;
+    /** 申请人联系电话 */
+    private String applicantPhone;
+    /** 申请人邮箱 */
+    private String applicantEmail;
     /** 使用目的(个人使用/课程使用) */
     private String purpose;
     /** 课程名称(如果课程使用) */
@@ -46,6 +52,10 @@ public class LabApplication {
     private Integer status;
     /** 审核人ID */
     private Integer reviewerId;
+    /** 审核人姓名（冗余字段） */
+    private String reviewerName;
+    /** 审核人角色（admin） */
+    private String reviewerRole;
     /** 审核时间 */
     private LocalDateTime reviewTime;
     /** 审核意见 */

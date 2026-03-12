@@ -24,6 +24,12 @@ public class LabApplicationRequest {
     /** 学生人数 */
     private Integer studentCount;
 
+    /** 申请人联系电话 */
+    private String applicantPhone;
+
+    /** 申请人邮箱 */
+    private String applicantEmail;
+
     /** 开始使用时间，仅时间部分，格式：HH:mm:ss */
     private String startTime;
 

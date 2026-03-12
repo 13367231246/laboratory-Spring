@@ -12,11 +12,11 @@ public interface EquipmentApplicationMapper {
     @Insert("insert into equipment_application(application_no, " +
             "equipment_id, equipment_name, equipment_type, equipment_model, asset_number, " +
             "laboratory_id, lab_number, lab_name, location, " +
-            "applicant_id, applicant_role, quantity, purpose, start_time, end_time, status, create_time, update_time) " +
+            "applicant_id, applicant_role, applicant_real_name, applicant_phone, applicant_email, quantity, purpose, start_time, end_time, status, create_time, update_time) " +
             "values(#{applicationNo}, " +
             "#{equipmentId}, #{equipmentName}, #{equipmentType}, #{equipmentModel}, #{assetNumber}, " +
             "#{laboratoryId}, #{labNumber}, #{labName}, #{location}, " +
-            "#{applicantId}, #{applicantRole}, #{quantity}, #{purpose}, #{startTime}, #{endTime}, #{status}, now(), now())")
+            "#{applicantId}, #{applicantRole}, #{applicantRealName}, #{applicantPhone}, #{applicantEmail}, #{quantity}, #{purpose}, #{startTime}, #{endTime}, #{status}, now(), now())")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void add(EquipmentApplication application);
 
@@ -74,4 +74,12 @@ public interface EquipmentApplicationMapper {
 
     @Select("select application_no from equipment_application where application_no like concat('EQP', date_format(now(), '%Y%m%d'), '%') order by id desc limit 1")
     String findMaxApplicationNoToday();
+    
+    // 统计今日申请数量
+    @Select("select count(*) from equipment_application where date(create_time) = curdate()")
+    Integer countTodayApplications();
+    
+    // 获取今日申请（限制条数）
+    @Select("select * from equipment_application where date(create_time) = curdate() order by create_time desc limit #{limit}")
+    List<EquipmentApplication> findTodayApplications(@Param("limit") Integer limit);
 }

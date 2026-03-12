@@ -23,6 +23,12 @@ public class EquipmentApplicationRequest {
     /** 使用目的 */
     private String purpose;
 
+    /** 申请人联系电话 */
+    private String applicantPhone;
+
+    /** 申请人邮箱 */
+    private String applicantEmail;
+
     /** 开始使用时间，格式：yyyy-MM-dd HH:mm:ss */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime;

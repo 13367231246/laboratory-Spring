@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/lab-application")
@@ -34,6 +35,8 @@ public class LabApplicationController {
         application.setCourseName(request.getCourseName());
         application.setClassName(request.getClassName());
         application.setStudentCount(request.getStudentCount());
+        application.setApplicantPhone(request.getApplicantPhone());
+        application.setApplicantEmail(request.getApplicantEmail());
 
         LocalTime start = LocalTime.parse(request.getStartTime());
         LocalTime end = LocalTime.parse(request.getEndTime());
@@ -137,5 +140,14 @@ public class LabApplicationController {
     public Result<UserStatistics> getMyStatistics() {
         UserStatistics statistics = labApplicationService.getMyStatistics();
         return Result.success(statistics);
+    }
+    
+    /**
+     * 所有用户：查看今日实验室申请信息（限制5条）
+     */
+    @GetMapping("/today")
+    public Result<List<LabApplication>> listTodayApplications() {
+        List<LabApplication> applications = labApplicationService.getTodayApplications(5);
+        return Result.success(applications);
     }
 }

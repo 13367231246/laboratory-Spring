@@ -52,6 +52,7 @@ public class EquipmentApplicationServiceImpl implements EquipmentApplicationServ
         }
         String role = user.getRole();
         application.setApplicantRole("teacher".equalsIgnoreCase(role) ? "teacher" : "student");
+        application.setApplicantRealName(user.getRealName());
         application.setStatus(STATUS_PENDING);
 
         if (application.getQuantity() == null || application.getQuantity() <= 0) {
@@ -272,5 +273,15 @@ public class EquipmentApplicationServiceImpl implements EquipmentApplicationServ
             throw new RuntimeException("无权限操作，仅管理员可执行该操作");
         }
         return id;
+    }
+    
+    @Override
+    public Integer countTodayApplications() {
+        return equipmentApplicationMapper.countTodayApplications();
+    }
+    
+    @Override
+    public List<EquipmentApplication> getTodayApplications(Integer limit) {
+        return equipmentApplicationMapper.findTodayApplications(limit);
     }
 }

@@ -60,6 +60,21 @@ public class EquipmentApplication {
     private String applicantRole;
     
     /**
+     * 申请人真实姓名（冗余字段）
+     */
+    private String applicantRealName;
+    
+    /**
+     * 申请人联系电话
+     */
+    private String applicantPhone;
+    
+    /**
+     * 申请人邮箱
+     */
+    private String applicantEmail;
+    
+    /**
      * 申请数量，默认为1
      */
     private Integer quantity;

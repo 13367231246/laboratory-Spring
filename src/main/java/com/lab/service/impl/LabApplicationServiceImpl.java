@@ -51,6 +51,7 @@ public class LabApplicationServiceImpl implements LabApplicationService {
         }
         String role = user.getRole();
         application.setApplicantRole("teacher".equalsIgnoreCase(role) ? "teacher" : "student");
+        application.setApplicantRealName(user.getRealName());
         application.setStatus(STATUS_PENDING);
 
         Laboratory lab = laboratoryMapper.findById(application.getLaboratoryId());
@@ -169,7 +170,10 @@ public class LabApplicationServiceImpl implements LabApplicationService {
         if (app.getStatus() != STATUS_PENDING) {
             throw new RuntimeException("仅待审核的申请可以执行审核通过");
         }
-        labApplicationMapper.review(id, STATUS_APPROVED, reviewerId, reviewComment);
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        String reviewerName = claims != null ? (String) claims.get("username") : null;
+        String reviewerRole = claims != null ? (String) claims.get("role") : null;
+        labApplicationMapper.review(id, STATUS_APPROVED, reviewerId, reviewerName, reviewerRole, reviewComment);
     }
 
     @Override
@@ -185,7 +189,10 @@ public class LabApplicationServiceImpl implements LabApplicationService {
         if (reviewComment == null || reviewComment.trim().isEmpty()) {
             throw new RuntimeException("拒绝申请时必须填写审核意见");
         }
-        labApplicationMapper.review(id, STATUS_REJECTED, reviewerId, reviewComment);
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        String reviewerName = claims != null ? (String) claims.get("username") : null;
+        String reviewerRole = claims != null ? (String) claims.get("role") : null;
+        labApplicationMapper.review(id, STATUS_REJECTED, reviewerId, reviewerName, reviewerRole, reviewComment);
     }
 
     @Override

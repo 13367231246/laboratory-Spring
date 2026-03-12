@@ -3,6 +3,8 @@ package com.lab.service;
 import com.lab.pojo.EquipmentApplication;
 import com.lab.pojo.PageBean;
 
+import java.util.List;
+
 public interface EquipmentApplicationService {
 
     /** 用户提交设备申请 */
@@ -37,4 +39,10 @@ public interface EquipmentApplicationService {
 
     /** 定时任务：自动完成超时未结束的申请 */
     void autoCompleteOverdue();
+    
+    /** 统计今日申请数量 */
+    Integer countTodayApplications();
+    
+    /** 获取今日申请（限制条数） */
+    List<EquipmentApplication> getTodayApplications(Integer limit);
 }

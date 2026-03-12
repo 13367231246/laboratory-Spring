@@ -9,9 +9,9 @@ import java.util.List;
 @Mapper
 public interface LabApplicationMapper {
 
-    @Insert("insert into lab_application(application_no, laboratory_id, lab_number, lab_name, location, applicant_id, applicant_role, purpose, " +
+    @Insert("insert into lab_application(application_no, laboratory_id, lab_number, lab_name, location, applicant_id, applicant_role, applicant_real_name, applicant_phone, applicant_email, purpose, " +
             "course_name, class_name, student_count, start_time, end_time, status, create_time, update_time) " +
-            "values(#{applicationNo}, #{laboratoryId}, #{labNumber}, #{labName}, #{location}, #{applicantId}, #{applicantRole}, #{purpose}, " +
+            "values(#{applicationNo}, #{laboratoryId}, #{labNumber}, #{labName}, #{location}, #{applicantId}, #{applicantRole}, #{applicantRealName}, #{applicantPhone}, #{applicantEmail}, #{purpose}, " +
             "#{courseName}, #{className}, #{studentCount}, #{startTime}, #{endTime}, #{status}, now(), now())")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void add(LabApplication application);
@@ -56,10 +56,12 @@ public interface LabApplicationMapper {
     @Select("select application_no from lab_application where application_no like concat('LAB', date_format(now(), '%Y%m%d'), '%') order by id desc limit 1")
     String findMaxApplicationNoToday();
 
-    @Update("update lab_application set status = #{status}, reviewer_id = #{reviewerId}, review_time = now(), review_comment = #{reviewComment}, update_time = now() where id = #{id}")
+    @Update("update lab_application set status = #{status}, reviewer_id = #{reviewerId}, reviewer_name = #{reviewerName}, reviewer_role = #{reviewerRole}, review_time = now(), review_comment = #{reviewComment}, update_time = now() where id = #{id}")
     void review(@Param("id") Integer id,
                 @Param("status") Integer status,
                 @Param("reviewerId") Integer reviewerId,
+                @Param("reviewerName") String reviewerName,
+                @Param("reviewerRole") String reviewerRole,
                 @Param("reviewComment") String reviewComment);
 
     @Delete("delete from lab_application where id = #{id}")

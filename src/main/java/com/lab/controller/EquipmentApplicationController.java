@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/equipment-application")
 @Validated
@@ -27,6 +29,8 @@ public class EquipmentApplicationController {
         application.setLaboratoryId(request.getLaboratoryId());
         application.setQuantity(request.getQuantity());
         application.setPurpose(request.getPurpose());
+        application.setApplicantPhone(request.getApplicantPhone());
+        application.setApplicantEmail(request.getApplicantEmail());
         application.setStartTime(request.getStartTime());
         application.setEndTime(request.getEndTime());
         EquipmentApplication created = equipmentApplicationService.apply(application);
@@ -116,5 +120,14 @@ public class EquipmentApplicationController {
                                                           @RequestParam Integer pageSize) {
         PageBean<EquipmentApplication> pageBean = equipmentApplicationService.listAll(pageNo, pageSize);
         return Result.success(pageBean);
+    }
+    
+    /**
+     * 所有用户：查看今日设备申请信息（限制5条）
+     */
+    @GetMapping("/today")
+    public Result<List<EquipmentApplication>> listTodayApplications() {
+        List<EquipmentApplication> applications = equipmentApplicationService.getTodayApplications(5);
+        return Result.success(applications);
     }
 }
